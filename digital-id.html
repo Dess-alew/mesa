@@ -1,197 +1,226 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Professional Digital ID</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MESSA Digital ID</title>
+
+<style>
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #eef2f5;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .wrapper {
+    max-width: 420px;
+    margin: auto;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+
+  input {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border: none;
+    background: #1f4fd8;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  .download {
+    background: #0b8457;
+  }
+
+  .card {
+    margin-top: 20px;
+    background: white;
+    border-radius: 12px;
+    border: 2px solid #222;
+    padding: 18px;
+    text-align: left;
+  }
+
+  .org {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .field {
+    margin: 6px 0;
+    font-size: 15px;
+  }
+
+  .label {
+    font-weight: 600;
+  }
+
+  .approval {
+    margin-top: 14px;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .footer {
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
+    color: #555;
+  }
+
+  @media print {
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f0f4fa;
-      display: flex;
-      justify-content: center;
-    }
-
-    .card {
-      width: 400px;
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-      overflow: hidden;
+      padding: 0;
     }
-
-    form {
-      padding: 20px;
+    input, button, h1 {
+      display: none;
     }
-
-    .card-header {
-      background: #1d4ed8;
-      color: white;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
+    .card {
+      border-radius: 0;
+      margin-top: 0;
+      border: 2px solid #000;
     }
-
-    .logo {
-      width: 60px;
-      height: 60px;
-      margin-right: 15px;
-    }
-
-    .header-title {
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .card-body {
-      padding: 20px;
-    }
-
-    .card-body p {
-      margin: 8px 0;
-      font-size: 16px;
-      color: #374151;
-    }
-
-    .signature {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .download-btns {
-      margin-top: 15px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    button {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 8px;
-      background: #1d4ed8;
-      color: white;
-      cursor: pointer;
-    }
-
-    label {
-      display: block;
-      margin: 8px 0 4px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-  </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  }
+</style>
 </head>
+
 <body>
 
-<div class="card">
-  <form id="idForm">
-    <h2>Create Your Digital ID</h2>
-    <label for="name">Full Name</label>
-    <input id="name" type="text" placeholder="Jane Doe" required>
+<div class="wrapper">
+  <h1>MESSA Digital ID</h1>
 
-    <label for="email">Email</label>
-    <input id="email" type="email" placeholder="you@example.org" required>
+  <input id="nameInput" placeholder="Enter your full name">
+  <button onclick="generateID()">Generate ID</button>
 
-    <button type="submit">Generate Digital ID</button>
-  </form>
+  <button id="downloadBtn" class="download" onclick="downloadID()" style="display:none;">
+    Download ID (PDF)
+  </button>
 
-  <div id="idCard" style="display:none;">
-    <div class="card-header">
-      <!-- Embedded Base64 logo -->
-      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAB/UlEQVR4nO3YwU3DMBBA0c41R/AwDJBkmKAcDZnD9mFrhE6Ej/v95bUFBQX37+p2JZkCQAAAAAAAAAAADAD8b/LP5osrVfMGh5zq7N4fxJr9ZvY+rth1uvX+j4zMGv1/r+04R8Wq3b+GxeG8ev1W86Gz1+Z+13p+5P9frk5cOx5t7G+1vP0r+OXrdjI79z1rmr6Omc7/LH4fL9r/buUvz/ox5kzzuTfrn0n8dF1/oj+k+nXpbw9ZJ+T1zR+HnlbqPOTeyG8r1zHn1PwL7/A5aP5U5t/m0/1r1+oy+fGr9fP8/PDd+f97H++3/F+rqPL+9v3+O7V4af+k+N/b/jftuD+j76f6f/bfj/yN17GvH+5MZ6w9P/wAAAAAAAAAA4Bv9AN9B6ZfLV2pNwAAAABJRU5ErkJggg==" 
-           alt="Association Logo" class="logo">
-      <div class="header-title">MESA Membership ID</div>
+  <div id="card" class="card" style="display:none;">
+    <div class="org">MESSA</div>
+
+    <div class="field">
+      <span class="label">Name:</span>
+      <span id="memberName"></span>
     </div>
 
-    <div class="card-body">
-      <p id="outName"><strong>Name:</strong></p>
-      <p id="outEmail"><strong>Email:</strong></p>
-      <p id="outId"><strong>Member ID:</strong></p>
-
-      <div class="signature">
-        <div style="font-size:12px; color:#374151; margin-bottom:4px;">Authorized by</div>
-        <div style="font-weight:bold;">John Smith</div>
-        <div style="font-size:12px; color:#374151;">President, MESA</div>
-      </div>
+    <div class="field">
+      <span class="label">Member ID:</span>
+      MESSA-2018-<span id="memberId"></span>
     </div>
 
-    <div class="download-btns">
-      <button id="downloadPng" type="button">Download PNG</button>
-      <button id="downloadPdf" type="button">Download PDF</button>
+    <div class="field">
+      <span class="label">Status:</span> Active Member
+    </div>
+
+    <div class="field">
+      <span class="label">Valid Year:</span> 2018
+    </div>
+
+    <div class="approval">
+      Approved by<br>
+      <b>Mequanent Ashagrie</b><br>
+      <i>MESSA President</i>
+    </div>
+
+    <div class="footer">
+      Official Digital ID • Printable
     </div>
   </div>
 </div>
 
 <script>
-const form = document.getElementById('idForm');
-const idCard = document.getElementById('idCard');
-const downloadPng = document.getElementById('downloadPng');
-const downloadPdf = document.getElementById('downloadPdf');
+const members = [
+  "Shewangizaw Birhanie G/Meskel",
+  "Dr Solomon Worku Mengesha",
+  "Liyew Mekonnen Ayehubizu",
+  "Awoke Melak Wassie",
+  "Wondmnew Kindu Wubneh",
+  "Worku Ayehu Dubale",
+  "Yibeltal Berie Bisewr",
+  "Bantelay Wondirad Mengistu",
+  "Birhanu Abebaw Assefa",
+  "Eshetu Esubalew Molla",
+  "Wanasew Belay Ewnetu",
+  "Dr Getachew Fentaw Debie",
+  "Dr Destaw Mequannent",
+  "Fantahun Gezie Matebe",
+  "Adem Desalegn Zekerya",
+  "Addisu Melkie Gultie",
+  "Abaynew Asemu Asrade",
+  "Fiseha Mesfin Zelelew",
+  "Libagba Abtew Mihretu",
+  "Ashagrachew Melkamu Gedefa",
+  "Assefa Mequannent Yalew",
+  "Adane Keleme G/Eyesus",
+  "Dr Tseganew Addisu Teka",
+  "Aschalew Getnet Mengstu",
+  "Dr Abiy Misganaw Ayalew",
+  "Dr Admasu Abraham Abebe",
+  "Dr Ali Hasen Yesuf",
+  "Dr Zewdu Nahusenay Aragaw",
+  "Erkie Gelaw Yigzaw",
+  "Yibeltal Mulat Mesfin",
+  "Dr Yalew Hassen Tuahir",
+  "Dr Solomon Zerihun Wereta",
+  "Shegaw Alebel Ejigu",
+  "Mulunesh Getnet Mengistu",
+  "Dr Getu Berihun Taw",
+  "Desalew Asratie Asegu",
+  "Truye Kumie Minaye",
+  "Dr Dessie Tarekegn Bantelay",
+  "Habtamu Kassie Beyene",
+  "Getachew Mekonnen Sisay",
+  "Mulugeta Mesfin Zelelew",
+  "Gebrie Worku Mengessha",
+  "Mengistu Birhan Belay",
+  "Habtemariam Sisay Ayalew",
+  "Abrham Kasa Bayh",
+  "Birara Semagn Gelaye",
+  "Dr Yohanes Gedamu Wondifraw",
+  "Dr Tirngo Dinku Abeje",
+  "Endalkachew Mersha"
+];
 
-const usedEntries = []; // Stores {name, email}
+function generateID() {
+  const input = document.getElementById("nameInput").value.trim().toLowerCase();
+  const found = members.find(m => m.toLowerCase() === input);
 
-function generateMemberId() {
-  const date = new Date();
-  const yyyymmdd = date.toISOString().slice(0,10).replace(/-/g,"");
-  const rand = Math.floor(Math.random() * 100000);
-  return `MEM-${yyyymmdd}-${rand}`;
+  if (found) {
+    document.getElementById("memberName").innerText = found;
+    document.getElementById("memberId").innerText =
+      members.indexOf(found) + 1001;
+
+    document.getElementById("card").style.display = "block";
+    document.getElementById("downloadBtn").style.display = "block";
+  } else {
+    alert("እባክዎ የአባልነት ክፍያዎን በመጀመሪያ ይክፈሉ።or Name not found in the authorized MESSA member list.");
+  }
 }
 
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-
-  // Check for duplicates
-  const duplicate = usedEntries.some(entry => entry.name.toLowerCase() === name.toLowerCase() &&
-                                              entry.email.toLowerCase() === email.toLowerCase());
-  if (duplicate) {
-    alert("This Name and Email combination has already been used!");
-    return;
-  }
-
-  // Save entry to used list
-  usedEntries.push({ name, email });
-
-  const memberId = generateMemberId();
-
-  document.getElementById('outName').textContent = "Name: " + name;
-  document.getElementById('outEmail').textContent = "Email: " + email;
-  document.getElementById('outId').textContent = "Member ID: " + memberId;
-
-  idCard.style.display = "block";
-});
-
-downloadPng.addEventListener('click', async () => {
-  const canvas = await html2canvas(idCard, { scale: 2 });
-  const link = document.createElement('a');
-  link.download = "digital-id.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
-});
-
-downloadPdf.addEventListener('click', async () => {
-  const canvas = await html2canvas(idCard, { scale: 2 });
-  const imgData = canvas.toDataURL("image/png");
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF("p", "mm", "a4");
-  const pdfWidth = pdf.internal.pageSize.getWidth() - 20;
-  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  pdf.addImage(imgData, "PNG", 10, 10, pdfWidth, pdfHeight);
-  pdf.save("digital-id.pdf");
-});
+function downloadID() {
+  window.print();
+}
 </script>
 
 </body>

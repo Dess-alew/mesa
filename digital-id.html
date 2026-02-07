@@ -61,8 +61,8 @@
   .org {
     text-align: center;
     font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 18px;
+    margin-bottom: 12px;
   }
 
   .field {
@@ -109,15 +109,15 @@
 <div class="wrapper">
   <h1>MESSA Digital ID</h1>
 
-  <input id="nameInput" placeholder="Enter your full name">
+  <input id="nameInput" placeholder="Enter your full name exactly">
   <button onclick="generateID()">Generate ID</button>
 
   <button id="downloadBtn" class="download" onclick="downloadID()" style="display:none;">
-    Download ID (PDF)
+    Download / Print ID
   </button>
 
   <div id="card" class="card" style="display:none;">
-    <div class="org">Mekane Eyesus Sec. School Alumni (MESSA) MemberID</div>
+    <div class="org">Mekane Eyesus Sec. School Alumni (MESSA) Member ID</div>
 
     <div class="field">
       <span class="label">Name:</span>
@@ -130,12 +130,26 @@
     </div>
 
     <div class="field">
+      <span class="label">Phone:</span>
+      <span id="memberPhone"></span>
+    </div>
+
+    <div class="field">
+      <span class="label">Location:</span>
+      <span id="memberLocation"></span>
+    </div>
+
+    <div class="field">
       <span class="label">Status:</span> Active Member
     </div>
 
     <div class="field">
       <span class="label">Valid Year:</span> 2018
     </div>
+    <div class="field">
+  <span class="label">Issued Date:</span>
+  <span id="issuedDate"></span>
+</div>
 
     <div class="approval">
       Approved by<br>
@@ -151,116 +165,121 @@
 
 <script>
 const members = [
-  "Shewangizaw Birhanie G/Meskel",
-  "Dr Solomon Worku Mengesha",
-  "Liyew Mekonnen Ayehubizu",
-  "Awoke Melak Wassie",
-  "Wondmnew Kindu Wubneh",
-  "Worku Ayehu Dubale",
-  "Yibeltal Berie Bisewr",
-  "Bantelay Wondirad Mengistu",
-  "Birhanu Abebaw Assefa",
-  "Eshetu Esubalew Molla",
-  "Wanasew Belay Ewnetu",
-  "Dr Getachew Fentaw Debie",
-  "Dr Destaw Mequannent",
-  "Fantahun Gezie Matebe",
-  "Adem Desalegn Zekerya",
-  "Addisu Melkie Gultie",
-  "Abaynew Asemu Asrade",
-  "Fiseha Mesfin Zelelew",
-  "Libagba Abtew Mihretu",
-  "Ashagrachew Melkamu Gedefa",
-  "Assefa Mequannent Yalew",
-  "Adane Keleme G/Eyesus",
-  "Dr Tseganew Addisu Teka",
-  "Aschalew Getnet Mengstu",
-  "Dr Abiy Misganaw Ayalew",
-  "Dr Admasu Abraham Abebe",
-  "Dr Ali Hasen Yesuf",
-  "Dr Zewdu Nahusenay Aragaw",
-  "Erkie Gelaw Yigzaw",
-  "Yibeltal Mulat Mesfin",
-  "Dr Yalew Hassen Tuahir",
-  "Dr Solomon Zerihun Wereta",
-  "Shegaw Alebel Ejigu",
-  "Mulunesh Getnet Mengistu",
-  "Dr Getu Berihun Taw",
-  "Desalew Asratie Asegu",
-  "Truye Kumie Minaye",
-  "Dr Dessie Tarekegn Bantelay",
-  "Habtamu Kassie Beyene",
-  "Getachew Mekonnen Sisay",
-  "Mulugeta Mesfin Zelelew",
-  "Gebrie Worku Mengessha",
-  "Mengistu Birhan Belay",
-  "Habtemariam Sisay Ayalew",
-  "Abrham Kasa Bayh",
-  "Birara Semagn Gelaye",
-  "Dr Yohanes Gedamu Wondifraw",
-  "Dr Tirngo Dinku Abeje",
-  "Endalkachew Mersha",
-   "Zewdu Wassie Taye",
-  "Setegn Tigabu Tassew",
-  "Adugnaw Admas Mekonnen",
-  "Dr Yibeltal Kiflie Alemayehu",
-  "Abatyhun Tesfu Awulew",
-  "Dr Endalkachew Worku Mengesha",
-  "Dr Walelign Worku Yalew",
-  "Captain Fekadie Melak Kassie",
-  "Mequannent Ashagrie Tarekegn",
-  "Dr Adane Abebaw Gesesse",
-  "Proff Alemayehu Worku Yalew",
-  "Shimelis Maru Jenber",
-  "Desalegn Mengstie Mihretu",
-  "Abaynew Yirdaw Yimam",
-  "Bayelign Getnet Kassie",
-  "Getasew Alem Yesigat",
-  "Habil rku Mengesha",
-  "Alehegn Birhan Belay",
-  "Tewodros Erkie Minay",
-  "Gizachew Sisay Asnake",
-  "Dr Kindalem Damtie Mihretu",
-  "Girma Kassie Dagnaw",
-  "Goshu Mengstie Tsegaw",
-  "Abraham Andargie Tegegne",
-  "Marie Teshome Kassie",
-  "Dr Mollalign Haile Takele",
-  "Tsedalu Sisay Fogie",
-  "Muluken Mekuriaw Getu",
-  "Zelalem Adugna Tarekegn",
-  "Birhanu Negash Kumie",
-  "Worku Andarg Wassie",
-  "Mariamawit Alem Yesigat",
-  "Ybeltal Worku Mengesha",
-  "Adane Tesfaye Melkamu",
-  "Mengstu Asaminew Birku",
-  "Desta Asratie Kassie",
-  "Tadele Fanta Ayele",
-  "Yaregal Fetene Woreta",
-  "Mohamed Abat Yasin",
-  "Tsedalu Fenta Ayele",
-  "Solomon Tiruneh Mesfin",
-  "Dessalew Asratie Asegu",
-  "Mequanent Ashagrie",
-  "Tesfalem Gashaw Belete"
+  { name: "Shewangizaw Birhanie G/Meskel", phone: "+251-900-000001", location: "Addis Ababa" },
+  { name: "Dr Solomon Worku Mengesha", phone: "+251-900-000002", location: "Addis Ababa" },
+  { name: "Liyew Mekonnen Ayehubizu", phone: "+251-900-000003", location: "Bahir Dar" },
+  { name: "Awoke Melak Wassie", phone: "+251-900-000004", location: "Gondar" },
+  { name: "Mequanent Ashagrie", phone: "+251-900-999999", location: "Addis Ababa" },
+  { name: "Tesfalem Gashaw Belete", phone: "+251-900-000999", location: "Debre Markos" },
+  { name: "Wondmnew Kindu Wubneh", phone: "0912366347", location: "AA" },
+  { name: "Worku Ayehu Dubale", phone: "0918760104", location: "BDR" },
+  { name: "Yibeltal Berie Bisewr", phone: "0918705788", location: "BDR" },
+  { name: "Bantelay Wondirad Mengistu", phone: "0911768113", location: "A" },
+  { name: "Birhanu Abebaw Assefa", phone: "0912274890", location: "AA" },
+  { name: "Eshetu Esubalew Molla", phone: "0911591602", location: "BDR" },
+  { name: "Wanasew Belay Ewnetu", phone: "0934149756", location: "AA" },
+  { name: "Dr Getachew Fentaw Debie", phone: "0918003144", location: "Wo" },
+  { name: "Dr Destaw Mequannent", phone: "0983015750", location: "AA" },
+  { name: "Fantahun Gezie Matebe", phone: "0911092244", location: "—" },
+  { name: "Adem Desalegn Zekerya", phone: "0921171012", location: "AA" },
+  { name: "Addisu Melkie Gultie", phone: "0921171012", location: "GDR" },
+  { name: "Abaynew Asemu Asrade", phone: "0911583170", location: "BDR" },
+  { name: "Fiseha Mesfin Zelelew", phone: "0911182642", location: "AA" },
+  { name: "Libagba Abtew Mihretu", phone: "0913073857", location: "—" },
+  { name: "Ashagrachew Melkamu Gedefa", phone: "0911820920", location: "A" },
+  { name: "Assefa Mequannent Yalew", phone: "0979877687", location: "AA" },
+  { name: "Adane Keleme G/Eyesus", phone: "0965906565", location: "AA" },
+  { name: "Dr Tseganew Addisu Teka", phone: "0919989664", location: "Des" },
+  { name: "Aschalew Getnet Mengstu", phone: "0935831152", location: "BDR" },
+  { name: "Dr Abiy Misganaw Ayalew", phone: "0965105429", location: "Des" },
+  { name: "Dr Admasu Abraham Abebe", phone: "0910274860", location: "BDR" },
+  { name: "Dr Ali Hasen Yesuf", phone: "0922120678", location: "D" },
+  { name: "Dr Zewdu Nahusenay Aragaw", phone: "0911925307", location: "A" },
+  { name: "Erkie Gelaw Yigzaw", phone: "0918706692", location: "BDR" },
+  { name: "Yibeltal Mulat Mesfin", phone: "0925792149", location: "AA" },
+  { name: "Dr Yalew Hassen Tuahir", phone: "972240741", location: "AA" },
+  { name: "Dr Solomon Zerihun Wereta", phone: "921886090", location: "—" },
+  { name: "Shegaw Alebel Ejigu", phone: "918782596", location: "BDR" },
+  { name: "Mulunesh Getnet Mengistu", phone: "0936352313", location: "GDR" },
+  { name: "Dr Getu Berihun Taw", phone: "—", location: "AA" },
+  { name: "Desalew Asratie Asegu", phone: "—", location: "America" },
+  { name: "Truye Kumie Minaye", phone: "0951414163", location: "BDR" },
+  { name: "Dr Dessie Tarekegn Bantelay", phone: "0918353879", location: "—" },
+  { name: "Habtamu Kassie Beyene", phone: "0912193920", location: "AA" },
+  { name: "Getachew Mekonnen Sisay", phone: "091225259", location: "—" },
+  { name: "Mulugeta Mesfin Zelelew", phone: "0962520151", location: "AA" },
+  { name: "Gebrie Worku Mengessha", phone: "—", location: "America" },
+  { name: "Mengistu Birhan Belay", phone: "0911728571", location: "AA" },
+  { name: "Habtemariam Sisay Ayalew", phone: "0912663093", location: "AA" },
+  { name: "Abrham Kasa Bayh", phone: "0918763021", location: "BDR" },
+  { name: "Birara Semagn Gelaye", phone: "0918027647", location: "GDR" },
+  { name: "Dr Yohanes Gedamu Wondifraw", phone: "0913105777", location: "—" },
+  { name: "Dr Tirngo Dinku Abeje", phone: "0924325243", location: "BDR" },
+  { name: "Endalkachew Mersha", phone: "—", location: "America" },
+  { name: "Zewdu Wassie Taye", phone: "0918160764", location: "BDR" },
+  { name: "Setegn Tigabu Tassew", phone: "0990392012", location: "AA" },
+  { name: "Adugnaw Admas Mekonnen", phone: "0918561763", location: "AA" },
+  { name: "Dr Yibeltal Kiflie Alemayehu", phone: "09210222", location: "—" },
+  { name: "Abatyhun Tesfu Awulew", phone: "0902022901", location: "BDR" },
+  { name: "Dr Endalkachew Worku Mengesha", phone: "091325787", location: "—" },
+  { name: "Dr Walelign Worku Yalew", phone: "0911969579", location: "AA" },
+  { name: "Captain Fekadie Melak Kassie", phone: "0921147789", location: "—" },
+  { name: "Mequannent Ashagrie Tarekegn", phone: "09115026", location: "—" },
+  { name: "Dr Adane Abebaw Gesesse", phone: "0920231207", location: "D" },
+  { name: "Proff Alemayehu Worku Yalew", phone: "0911405652", location: "—" },
+  { name: "Shimelis Maru Jenber", phone: "0527557471", location: "Israel" },
+  { name: "Desalegn Mengstie Mihretu", phone: "0911980092", location: "AA" },
+  { name: "Abaynew Yirdaw Yimam", phone: "0930112086", location: "—" },
+  { name: "Bayelign Getnet Kassie", phone: "0911383392", location: "AA" },
+  { name: "Alehegn Birhan Belay", phone: "0927679758", location: "AA" },
+  { name: "Tewodros Erkie Minay", phone: "0911013929", location: "AA" },
+  { name: "Gizachew Sisay Asnake", phone: "0911889468", location: "AA" },
+  { name: "Dr Kindalem Damtie Mihretu", phone: "0911146924", location: "—" },
+  { name: "Girma Kassie Dagnaw", phone: "—", location: "AA" },
+  { name: "Goshu Mengstie Tsegaw", phone: "0911529177", location: "AA" },
+  { name: "Abraham Andargie Tegegne", phone: "0903686868", location: "AA" },
+  { name: "Marie Teshome Kassie", phone: "0911301728", location: "AA" },
+  { name: "Dr Mollalign Haile Takele", phone: "0901934897", location: "B" },
+  { name: "Tsedalu Sisay Fogie", phone: "0912011500", location: "AA" },
+  { name: "Muluken Mekuriaw Getu", phone: "0911532196", location: "—" },
+  { name: "Zelalem Adugna Tarekegn", phone: "0911519656", location: "AA" },
+  { name: "Birhanu Negash Kumie", phone: "0911237645", location: "AA" },
+  { name: "Worku Andarg Wassie", phone: "0911102614", location: "AA" },
+  { name: "Adane Tesfaye Melkamu", phone: "0909299928", location: "AA" },
+  { name: "Mengstu Asaminew Birku", phone: "0911919091", location: "BDR" },
+  { name: "Desta Asratie Kassie", phone: "0918711219", location: "D/Tabor" },
+  { name: "Tadele Fanta Ayele", phone: "0911698006", location: "AA" },
+  { name: "Yaregal Fetene Woreta", phone: "—", location: "America" },
+  { name: "Mohamed Abat Yasin", phone: "0918762021", location: "BDR" },
+  { name: "Tsedalu Fenta Ayele", phone: "0911260644", location: "AA" },
+  { name: "Solomon Tiruneh Mesfin", phone: "—", location: "—" }
+ 
 ];
-
 function generateID() {
   const input = document.getElementById("nameInput").value.trim().toLowerCase();
-  const found = members.find(m => m.toLowerCase() === input);
+  const member = members.find(m => m.name.toLowerCase() === input);
 
-  if (found) {
-    document.getElementById("memberName").innerText = found;
-    document.getElementById("memberId").innerText =
-      members.indexOf(found) + 100;
-
-    document.getElementById("card").style.display = "block";
-    document.getElementById("downloadBtn").style.display = "block";
-  } else {
-    alert("እባክዎ የአባልነት ክፍያዎን በመጀመሪያ ይክፈሉ።");
+  if (!member) {
+    alert("እባክዎ ስሙዎን በትክክል ያስገቡ እና የአባልነት ክፍያ መክፍሏን ያረጋግጡ።");
+    return;
   }
+
+  document.getElementById("memberName").innerText = member.name;
+  document.getElementById("memberPhone").innerText = member.phone;
+  document.getElementById("memberLocation").innerText = member.location;
+  document.getElementById("memberId").innerText = members.indexOf(member) + 100;
+
+  // ✅ Set issued date to TODAY (when ID is generated)
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // months are 0-based
+  const year = today.getFullYear();
+  document.getElementById("issuedDate").innerText = `${day}/${month}/${year}`;
+
+  document.getElementById("card").style.display = "block";
+  document.getElementById("downloadBtn").style.display = "block";
 }
+
 
 function downloadID() {
   window.print();
